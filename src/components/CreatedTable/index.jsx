@@ -253,7 +253,9 @@ const CryptoHoldingsTable = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="right" sx={{ color: "white" }}>
-                    ---
+                    {checked.includes(item.coin)
+                      ? formatCurrency(item.totalHolding)
+                      : null}
                   </TableCell>
                 </TableRow>
               );

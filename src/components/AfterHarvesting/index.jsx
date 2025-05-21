@@ -96,7 +96,7 @@ const AfterHarvesting = () => {
       </table>
 
       <div className="mt-8 flex items-center">
-        <h3 className="text-lg font-medium">Realised Capital Gains:</h3>
+        <h3 className="text-lg font-medium">Effective Capital Gains:</h3>
         <p className="text-3xl font-bold mt-1 ml-5">
           {formatCurrency(
             afterHarvesting.capitalGains.stcg.profits -
