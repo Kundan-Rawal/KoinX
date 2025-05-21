@@ -1,12 +1,47 @@
-# React + Vite
+# Assignment for KoinX Frontend Internship
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React component to display cryptocurrency holdings, including current prices, total value, short-term and long-term gains, and dynamic sorting. Users can select/deselect assets and toggle between a brief and full list of holdings.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Display assets with current prices, gains, and total value
+- Dynamic sorting for all numerical and text fields
+- "View More / View Less" toggle for expanding or collapsing holdings
+- State management using Context API
+- Responsive table layout using Material UI
+- Checkbox selection for further actions (e.g., harvesting)
+- Automatically updates context state like `afterHarvesting`
 
-## Expanding the ESLint configuration
+## 🛠️ Setup Instructions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/crypto-holdings-table.git
+   cd crypto-holdings-table
+
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+4. **View in browser**
+
+   ```bash
+   localhost:5173
+
+
+   ```
+
+## Deployed Vercel Link https://koin-x-olive.vercel.app/
+
+**Thanks For Reading I am in urgent need for an internship**
+
+```
+
+```
