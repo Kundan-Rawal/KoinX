@@ -7,6 +7,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
+import CircleIcon from "@mui/icons-material/Circle";
 
 export default function AccordionUsage() {
   return (
@@ -34,12 +35,54 @@ export default function AccordionUsage() {
         >
           <div className="flex items-center">
             <InfoOutlinedIcon className=" text-[#6290FF]" />
-            <p className="text-sm">Important Notes and Disclaimers .</p>
+            <p className="text-sm ml-5">Important Notes and Disclaimers .</p>
           </div>
         </AccordionSummary>
         <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
+          <ul className="ml-5">
+            <div className="flex ">
+              <CircleIcon sx={{ height: "10px", marginTop: "7px" }} />
+              <li className="text-sm">
+                Tax-loss harvesting is currently not allowed under Indian tax
+                regulations. Please consult your tax advisor before making any
+                decisions.
+              </li>
+              <br />
+            </div>
+            <div className="flex ">
+              <CircleIcon sx={{ height: "10px", marginTop: "7px" }} />
+              <li className="text-sm">
+                Tax harvesting does not apply to derivatives or futures. These
+                are handled separately as business income under tax rules.
+              </li>
+              <br />
+            </div>
+            <div className="flex ">
+              <CircleIcon sx={{ height: "10px", marginTop: "7px" }} />
+              <li className="text-sm">
+                Price and market value data is fetched from Coingecko, not from
+                individual exchanges. As a result, values may slightly differ
+                from the ones on your exchange.
+              </li>
+              <br />
+            </div>
+            <div className="flex ">
+              <CircleIcon sx={{ height: "10px", marginTop: "7px" }} />
+              <li className="text-sm">
+                Some countries do not have a short-term / long-term bifurcation.
+                For now, we are calculating everything as long-term.
+              </li>
+              <br />
+            </div>
+            <div className="flex ">
+              <CircleIcon sx={{ height: "10px", marginTop: "7px" }} />
+              <li className="text-sm">
+                Only realized losses are considered for harvesting. Unrealized
+                losses in held assets are not counted.
+              </li>
+              <br />
+            </div>
+          </ul>
         </AccordionDetails>
       </Accordion>
     </div>

@@ -47,7 +47,7 @@ const AfterHarvesting = () => {
     });
 
   return (
-    <div className="bg-gradient-to-r from-[#3C9AFF] to-[#0066FE] text-white p-4 rounded-xl lg:w-[40%] mx-5 font-sans mb-2">
+    <div className="bg-gradient-to-r from-[#3C9AFF] to-[#0066FE] text-white p-4 rounded-xl lg:w-[40%] mx-0 lg:mx-5 font-sans mb-2">
       <h2 className="text-xl font-semibold mb-8">After Harvesting</h2>
 
       <table className="w-full text-left border-collapse">
@@ -106,7 +106,20 @@ const AfterHarvesting = () => {
           )}
         </p>
       </div>
-      <p>You are going to save </p>
+      <p>
+        {afterHarvesting.capitalGains.stcg.profits -
+          afterHarvesting.capitalGains.stcg.losses +
+          (afterHarvesting.capitalGains.ltcg.profits -
+            afterHarvesting.capitalGains.ltcg.losses) <
+        0
+          ? `Your taxable capital gains are reduced by: ${
+              afterHarvesting.capitalGains.stcg.profits -
+              afterHarvesting.capitalGains.stcg.losses +
+              (afterHarvesting.capitalGains.ltcg.profits -
+                afterHarvesting.capitalGains.ltcg.losses)
+            }`
+          : ""}
+      </p>
     </div>
   );
 };

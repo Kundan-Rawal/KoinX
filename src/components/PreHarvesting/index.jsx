@@ -22,7 +22,7 @@ const formatCurrency = (num) =>
 
 const PreHarvesting = () => {
   return (
-    <div className="bg-[#1f2a376d] text-white p-4 rounded-xl lg:w-[40%] mx-5 font-sans mb-2">
+    <div className="bg-[#1f2a376d] text-white p-4 rounded-xl lg:w-[40%] mx-0 lg:mx-5 font-sans mb-2">
       <h2 className="text-xl font-semibold mb-8">Pre Harvesting</h2>
 
       <table className="w-full text-left border-collapse">

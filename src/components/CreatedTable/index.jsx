@@ -11,10 +11,10 @@ import {
   Avatar,
   Typography,
   useMediaQuery,
+  Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useStateContext } from "../../statecontext/statecontext";
-import { getHoldings } from "../../API/Holdings/holdingsapi";
 
 const formatCurrency = (num) =>
   num.toLocaleString("en-US", {
@@ -26,10 +26,12 @@ const formatCurrency = (num) =>
 const CryptoHoldingsTable = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { checked, checking, holdings } = useStateContext();
+  const { checked, checking, holdings, afterHarvesting, setAfterHarvesting } =
+    useStateContext();
 
   const [sortField, setSortField] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [viewMore, setViewMore] = useState(false);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -40,38 +42,46 @@ const CryptoHoldingsTable = () => {
     }
   };
 
-  const getNestedValue = (obj, path) =>
-    path.split(".").reduce((o, key) => (o ? o[key] : null), obj);
-
-  const sortedData = [...holdings].sort((a, b) => {
-    const getValue = (item) => {
-      switch (sortField) {
-        case "coinName":
-          return item.coinName;
-        case "currentPrice":
-          return item.currentPrice;
-        case "stcg.gain":
-          return item.stcg.gain;
-        case "ltcg.gain":
-          return item.ltcg.gain;
-        case "totalValue":
-          return item.totalHolding * item.currentPrice;
-        default:
-          return 0;
+  const getSortedData = () => {
+    return [...holdings].sort((a, b) => {
+      const getValue = (item) => {
+        switch (sortField) {
+          case "coinName":
+            return item.coinName;
+          case "currentPrice":
+            return item.currentPrice;
+          case "stcg.gain":
+            return item.stcg.gain;
+          case "ltcg.gain":
+            return item.ltcg.gain;
+          case "totalValue":
+            return item.totalHolding * item.currentPrice;
+          default:
+            return 0;
+        }
+      };
+      const aVal = getValue(a);
+      const bVal = getValue(b);
+      if (typeof aVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      } else {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
       }
-    };
+    });
+  };
 
-    const aVal = getValue(a);
-    const bVal = getValue(b);
+  const toggleViewMore = () => {
+    setViewMore((prev) => {
+      const newVal = !prev;
+      // <-- This will update afterHarvesting correctly
+      return newVal;
+    });
+  };
 
-    if (typeof aVal === "string") {
-      return sortOrder === "asc"
-        ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal);
-    } else {
-      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
-    }
-  });
+  const sortedData = getSortedData();
+  const dataToShow = viewMore ? sortedData : sortedData.slice(0, 5);
 
   return (
     <div className="bg-[#1f2a376d] p-2 rounded-2xl mt-4">
@@ -105,6 +115,7 @@ const CryptoHoldingsTable = () => {
                 </div>
               </TableCell>
               <TableCell
+                align="right"
                 sx={{ color: "white", cursor: "pointer" }}
                 onClick={() => handleSort("currentPrice")}
               >
@@ -116,6 +127,7 @@ const CryptoHoldingsTable = () => {
                   : ""}
               </TableCell>
               <TableCell
+                align="right"
                 sx={{ color: "white", cursor: "pointer" }}
                 onClick={() => handleSort("totalValue")}
               >
@@ -127,6 +139,7 @@ const CryptoHoldingsTable = () => {
                   : ""}
               </TableCell>
               <TableCell
+                align="right"
                 sx={{ color: "white", cursor: "pointer" }}
                 onClick={() => handleSort("stcg.gain")}
               >
@@ -138,6 +151,7 @@ const CryptoHoldingsTable = () => {
                   : ""}
               </TableCell>
               <TableCell
+                align="right"
                 sx={{ color: "white", cursor: "pointer" }}
                 onClick={() => handleSort("ltcg.gain")}
               >
@@ -148,11 +162,13 @@ const CryptoHoldingsTable = () => {
                     : "↓"
                   : ""}
               </TableCell>
-              <TableCell sx={{ color: "white" }}>Amount to sell</TableCell>
+              <TableCell align="right" sx={{ color: "white" }}>
+                Amount to sell
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedData.map((item, index) => {
+            {dataToShow.map((item, index) => {
               const value = item.totalHolding * item.currentPrice;
               return (
                 <TableRow key={index}>
@@ -186,20 +202,22 @@ const CryptoHoldingsTable = () => {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div>
-                      <Typography sx={{ fontSize: 14, color: "white" }}>
-                        {`${formatCurrency(item.totalHolding)} ${item.coin}`}
-                      </Typography>
-                      <Typography variant="caption" color="gray">
-                        {`${formatCurrency(item.currentPrice)}/${item.coin}`}
-                      </Typography>
-                    </div>
+                  <TableCell align="right">
+                    <Typography sx={{ fontSize: 14, color: "white" }}>
+                      {`${formatCurrency(item.totalHolding)} ${item.coin}`}
+                    </Typography>
+                    <Typography variant="caption" color="gray">
+                      {`${formatCurrency(item.currentPrice)}/${item.coin}`}
+                    </Typography>
                   </TableCell>
-                  <TableCell sx={{ fontSize: 14, color: "white" }}>
+                  <TableCell
+                    align="right"
+                    sx={{ fontSize: 14, color: "white" }}
+                  >
                     {formatCurrency(value)}
                   </TableCell>
                   <TableCell
+                    align="right"
                     sx={{
                       color:
                         item.stcg.gain === 0
@@ -209,9 +227,15 @@ const CryptoHoldingsTable = () => {
                           : "lightgreen",
                     }}
                   >
-                    {formatCurrency(item.stcg.gain)}
+                    <Typography sx={{ fontSize: 14 }}>
+                      {formatCurrency(item.stcg.gain)}
+                    </Typography>
+                    <Typography variant="caption" color="gray">
+                      {`${formatCurrency(item.stcg.balance)} ${item.coin}`}
+                    </Typography>
                   </TableCell>
                   <TableCell
+                    align="right"
                     sx={{
                       color:
                         item.ltcg.gain === 0
@@ -221,15 +245,32 @@ const CryptoHoldingsTable = () => {
                           : "lightgreen",
                     }}
                   >
-                    {formatCurrency(item.ltcg.gain)}
+                    <Typography sx={{ fontSize: 14 }}>
+                      {formatCurrency(item.ltcg.gain)}
+                    </Typography>
+                    <Typography variant="caption" color="gray">
+                      {`${formatCurrency(item.ltcg.balance)} ${item.coin}`}
+                    </Typography>
                   </TableCell>
-                  <TableCell sx={{ color: "white" }}>---</TableCell>
+                  <TableCell align="right" sx={{ color: "white" }}>
+                    ---
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {holdings.length > 5 && (
+        <Button
+          variant="text"
+          sx={{ marginTop: "5px" }}
+          onClick={toggleViewMore}
+        >
+          {viewMore ? "View Less..." : "View More..."}
+        </Button>
+      )}
     </div>
   );
 };
